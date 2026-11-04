@@ -1,11 +1,8 @@
-// 根目录 build.gradle.kts —— 必须有 pluginManagement
 pluginManagement {
     repositories {
-        // 顺序很重要：gradlePluginPortal() 必须在第一位
         gradlePluginPortal()
         google()
         mavenCentral()
-        // 国内镜像兜底（可选）
         maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
     }
     resolutionStrategy {
