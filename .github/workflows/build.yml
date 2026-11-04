@@ -2,10 +2,8 @@ name: Build APK
 on: [push, workflow_dispatch]
 
 env:
-  # 彻底解决内存不足
   GRADLE_OPTS: "-Xmx3g -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.workers.max=2"
   JAVA_TOOL_OPTIONS: "-Xmx3g"
-  # 强制 Gradle 不用守护进程，避免 Actions 环境残留
   ORG_GRADLE_DAEMON: "false"
 
 jobs:
@@ -27,9 +25,8 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Install Android SDK (manual, 避开 setup-android v3 的 cmdline-tools 坑)
+      - name: Install Android SDK (manual)
         run: |
-          # 1. 下载最新 cmdline-tools 到 $ANDROID_HOME/cmdline-tools/latest
           SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
           TMP_ZIP="/tmp/cmdline-tools.zip"
           echo "Downloading cmdline-tools..."
@@ -38,15 +35,14 @@ jobs:
           unzip -q "$TMP_ZIP" -d "$ANDROID_HOME/cmdline-tools"
           mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
           rm "$TMP_ZIP"
-
-          # 2. 接受 licenses
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null
-
-          # 3. 安装必须组件：platform-34 + build-tools 34.0.0 + platform-tools
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
             "platforms;android-34" \
             "build-tools;34.0.0" \
             "platform-tools"
+
+      - name: Generate Gradle Wrapper (关键新增步骤)
+        run: gradle wrapper --gradle-version 8.5 --distribution-type all
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
