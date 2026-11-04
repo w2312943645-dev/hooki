@@ -1,0 +1,5 @@
+# 每行一个包名，# 开头为注释
+# 仅保留极少数必须直连的系统进程，防止 VPN 起来后系统 UI 假死
+com.android.systemui
+com.android.networkstack.inprocess
+# com.google.android.gms   # 如有需要自行取消注释

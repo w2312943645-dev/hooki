@@ -1,0 +1,22 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.globalvpnhook">
+
+    <application
+        android:allowBackup="true"
+        android:label="Global VPN Hook"
+        android:supportsRtl="true">
+
+        <!-- LSPosed 模块入口声明 -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="84" />
+        <!-- 仅作用于 AK 加速器 -->
+        <meta-data
+            android:name="xposedscope"
+            android:value="com.akspeed.jiasuqi.gameboost" />
+
+    </application>
+</manifest>
